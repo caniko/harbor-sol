@@ -41,6 +41,7 @@
       SOLANA_VERSION = solana.version;
     };
     shellHook = ''
+      export PATH="${pkgs.rustup}/bin:$PATH"
       export RUSTUP_HOME="''${XDG_CACHE_HOME:-$HOME/.cache}/harbor-sol/rustup"
       mkdir -p "$RUSTUP_HOME"
       if ! ${pkgs.rustup}/bin/rustup toolchain list | grep -F ${rustupToolchain} >/dev/null; then
