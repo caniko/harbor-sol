@@ -255,11 +255,11 @@
         "treefmt-nix": "treefmt-nix_2"
       },
       "locked": {
-        "lastModified": 1787617752,
-        "narHash": "sha256-P8s/I3UMnU63BuzVcLbFq+7+P5DFv/BRKdAXTyHPqaI=",
+        "lastModified": 1788977721,
+        "narHash": "sha256-+othZSrB8LLSeeQWiajnbVuVQbAGPtQ3+ZfJYdHu2b0=",
         "owner": "caniko",
         "repo": "harbor-rs",
-        "rev": "81ed1e31b6e7d1a39eb3ff1a52844c5b4b652cd7",
+        "rev": "fac8049316846e0ef1c1e6acd92aed7a337b333a",
         "type": "github"
       },
       "original": {
@@ -299,11 +299,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1786574736,
-        "narHash": "sha256-w0UHPwyVbHKMIB/J82XBhG9OSqIn68X6jYOZ5UXgGIM=",
+        "lastModified": 1788975598,
+        "narHash": "sha256-e2uYv4RDL+/XSCE1Qi04iFJUY/LrKvYpOWSR+zz3SSU=",
         "ref": "trunk",
-        "rev": "7e03c2bfd32c35da8c6531a5867dfdb66eeae766",
-        "revCount": 8,
+        "rev": "b158ee4c3cc9c0d6ca7ab2216906b51990699c8a",
+        "revCount": 9,
         "type": "git",
         "url": "https://github.com/caniko/nix-opencode-lsp.git"
       },
@@ -401,7 +401,8 @@
       "inputs": {
         "harbor-meta": "harbor-meta",
         "harbor-rs": "harbor-rs",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "treefmt-nix": "treefmt-nix_3"
       }
     },
     "rust-overlay": {
@@ -496,6 +497,26 @@
       "inputs": {
         "nixpkgs": [
           "harbor-rs",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1786901030,
+        "narHash": "sha256-WSFCsDSE5ffgD2MqzkM2CYjeFiKhRF/dJUN8uedb6YE=",
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "rev": "27b3b12a8e6375f28ebe122f07d230ca5459bbfa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "treefmt-nix",
+        "type": "github"
+      }
+    },
+    "treefmt-nix_3": {
+      "inputs": {
+        "nixpkgs": [
           "nixpkgs"
         ]
       },
