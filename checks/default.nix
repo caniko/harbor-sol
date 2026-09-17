@@ -22,6 +22,7 @@
     inputs = {
       harbor-sol = self;
       inherit nixpkgs;
+      inherit (self.inputs) treefmt-nix;
     };
     requiredFiles = [
       "flake.nix"
