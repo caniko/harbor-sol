@@ -2,6 +2,7 @@
   pkgs,
   self,
   nixpkgs,
+  nixpkgs-darwin,
   meta,
 }: {
   dev-shell = meta.devShellTests.mkCheck {
@@ -20,8 +21,8 @@
     system = pkgs.stdenv.hostPlatform.system;
     flakeNix = ../templates/default/flake.nix;
     inputs = {
-      harbor-sol = self;
-      inherit nixpkgs;
+      harbor = self.inputs.harborRoot;
+      inherit nixpkgs nixpkgs-darwin;
       inherit (self.inputs) treefmt-nix;
     };
     requiredFiles = [
@@ -32,7 +33,7 @@
       "programs/counter/Cargo.toml"
       "programs/counter/src/lib.rs"
     ];
-    requiredInputs = ["harbor-sol"];
+    requiredInputs = ["harbor" "nixpkgs-darwin"];
     commands = ["anchor" "cargo" "cargo-build-sbf" "solana" "solana-test-validator"];
     env = {
       ANCHOR_VERSION = pkgs.anchor.version;
