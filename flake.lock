@@ -332,6 +332,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-darwin": {
+      "locked": {
+        "lastModified": 1792526774,
+        "narHash": "sha256-+qjpjRPb6ak1rkodfh7wEtgQB3DaAI5tg0kSklSUmio=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "36fd15bbb657815e2028e31d715c2e43a1230c91",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-26.05-darwin",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1782614948,
@@ -405,6 +421,9 @@
         "harbor-meta": "harbor-meta",
         "harbor-rs": "harbor-rs",
         "nixpkgs": "nixpkgs",
+        "nixpkgs-darwin": "nixpkgs-darwin",
+        "solana-source": "solana-source",
+        "solana-source-darwin": "solana-source-darwin",
         "treefmt-nix": "treefmt-nix_4"
       }
     },
@@ -447,6 +466,40 @@
       "original": {
         "owner": "oxalica",
         "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "solana-source": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1781616971,
+        "narHash": "sha256-lbkuywAuLeTIoe/5zbKmxCbnNcEx96BiX6ftNJHutZE=",
+        "owner": "anza-xyz",
+        "repo": "agave",
+        "rev": "14786d96e9b635fd5d57e503f3fa0397a8ef9a6d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anza-xyz",
+        "repo": "agave",
+        "rev": "14786d96e9b635fd5d57e503f3fa0397a8ef9a6d",
+        "type": "github"
+      }
+    },
+    "solana-source-darwin": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1764021699,
+        "narHash": "sha256-Zubu7cTSJrJFSuguCo3msdas/QshFpo1+T6DVQyqrhY=",
+        "owner": "anza-xyz",
+        "repo": "agave",
+        "rev": "5a06890206cf9f00a5fbd253b8f417cc5c3a075c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anza-xyz",
+        "repo": "agave",
+        "rev": "5a06890206cf9f00a5fbd253b8f417cc5c3a075c",
         "type": "github"
       }
     },

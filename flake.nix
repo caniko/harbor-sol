@@ -17,6 +17,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.harbor-meta.follows = "harbor-meta";
     };
+    # Same pins as the harbor superproject root. The SBF workspace manifest and
+    # lock are evaluation inputs, so use immutable source inputs, not IFD.
+    solana-source = {
+      url = "github:anza-xyz/agave/14786d96e9b635fd5d57e503f3fa0397a8ef9a6d";
+      flake = false;
+    };
+    solana-source-darwin = {
+      url = "github:anza-xyz/agave/5a06890206cf9f00a5fbd253b8f417cc5c3a075c";
+      flake = false;
+    };
   };
 
   outputs = {
@@ -29,7 +39,13 @@
     solana-source,
     solana-source-darwin,
     ...
-  }: let
+  } @ outputArgs: let
+    harborRoot =
+      outputArgs.harborRoot or (harbor-meta.lib.standaloneRoot {
+        core = harbor-meta;
+        rust = harbor-rs;
+        solana = self;
+      });
     systems = ["x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
     forAllSystems = f:
       nixpkgs.lib.genAttrs systems (system:
@@ -66,7 +82,7 @@
 
     checks = forAllSystems (pkgs:
       import ./checks {
-        inherit pkgs self nixpkgs nixpkgs-darwin;
+        inherit pkgs self nixpkgs nixpkgs-darwin harborRoot;
         meta = harbor-meta.lib;
       });
 

@@ -4,6 +4,7 @@
   nixpkgs,
   nixpkgs-darwin,
   meta,
+  harborRoot,
 }: {
   dev-shell = meta.devShellTests.mkCheck {
     inherit pkgs;
@@ -21,7 +22,7 @@
     system = pkgs.stdenv.hostPlatform.system;
     flakeNix = ../templates/default/flake.nix;
     inputs = {
-      harbor = self.inputs.harborRoot;
+      harbor = harborRoot;
       inherit nixpkgs nixpkgs-darwin;
       inherit (self.inputs) treefmt-nix;
     };
