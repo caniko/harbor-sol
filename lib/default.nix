@@ -7,6 +7,16 @@
   timezone = harbor-meta.lib.timezone;
   rustOverlay = import harbor-rs.inputs.rust-overlay;
 
+  # ponytail: nixpkgs anchor 1.2.2 needs pkg-config with system zstd (zstd-sys)
+  # and oniguruma (onig_sys) but declares none, so it fails to build (uncached
+  # upstream). Drop once nixpkgs declares them.
+  fixAnchor = pkgs:
+    pkgs.anchor.overrideAttrs (old: {
+      nativeBuildInputs = (old.nativeBuildInputs or []) ++ [pkgs.pkg-config];
+      buildInputs = (old.buildInputs or []) ++ [pkgs.zstd pkgs.oniguruma];
+    });
+  anchorOverlay = final: prev: {anchor = fixAnchor prev;};
+
   mkCargoBuildSbf = {
     pkgs,
     solana ? pkgs.solana-cli,
@@ -44,7 +54,7 @@
 
   mkSolanaToolchain = {
     pkgs,
-    anchor ? pkgs.anchor,
+    anchor ? fixAnchor pkgs,
     solana ? pkgs.solana-cli,
     cargoBuildSbf ? mkCargoBuildSbf {inherit pkgs solana;},
     rustToolchain ? (harbor-rs.lib.mkToolchain {inherit pkgs;}).rustToolchain,

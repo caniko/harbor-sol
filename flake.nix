@@ -55,7 +55,7 @@
             else nixpkgs
           ) {
             inherit system;
-            overlays = [self.lib.rustOverlay];
+            overlays = [self.lib.rustOverlay self.lib.anchorOverlay];
           }));
     lib = import ./lib {
       inherit harbor-meta harbor-rs;
