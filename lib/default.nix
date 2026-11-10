@@ -7,19 +7,30 @@
   timezone = harbor-meta.lib.timezone;
   rustOverlay = import harbor-rs.inputs.rust-overlay;
 
-  # ponytail: nixpkgs anchor 1.2.2 needs pkg-config with system zstd (zstd-sys)
-  # and oniguruma (onig_sys) but declares none, so it fails to build (uncached
-  # upstream). Drop once nixpkgs declares them.
-  fixAnchor = pkgs:
-    pkgs.anchor.overrideAttrs (old: {
+  # ponytail: Nixpkgs' cargoSetupHook forces system libraries (44cddf9), but
+  # anchor 1.2.2 and solana-cli 4.0.3 do not declare the ones their -sys
+  # crates now require, so both fail to build (uncached upstream). Drop each
+  # override once Nixpkgs declares them.
+  withSystemLibs = pkgs: drv: libs:
+    drv.overrideAttrs (old: {
       nativeBuildInputs = (old.nativeBuildInputs or []) ++ [pkgs.pkg-config];
-      buildInputs = (old.buildInputs or []) ++ [pkgs.zstd pkgs.oniguruma];
+      buildInputs = (old.buildInputs or []) ++ libs;
     });
-  anchorOverlay = final: prev: {anchor = fixAnchor prev;};
+  fixAnchor = pkgs: withSystemLibs pkgs pkgs.anchor [pkgs.zstd pkgs.oniguruma];
+  # Its jemalloc crate links unprefixed symbols, which rust-jemalloc-sys does
+  # not export; let it build the bundled jemalloc as before the hook change.
+  fixSolanaCli = pkgs:
+    (withSystemLibs pkgs pkgs.solana-cli [pkgs.zstd pkgs.zlib]).overrideAttrs (old: {
+      preBuild = (old.preBuild or "") + "\nunset JEMALLOC_OVERRIDE\n";
+    });
+  systemLibsOverlay = final: prev: {
+    anchor = fixAnchor prev;
+    solana-cli = fixSolanaCli prev;
+  };
 
   mkCargoBuildSbf = {
     pkgs,
-    solana ? pkgs.solana-cli,
+    solana ? fixSolanaCli pkgs,
     source ?
       if pkgs.stdenv.hostPlatform.system == "x86_64-darwin"
       then solanaSourceDarwin
@@ -55,7 +66,7 @@
   mkSolanaToolchain = {
     pkgs,
     anchor ? fixAnchor pkgs,
-    solana ? pkgs.solana-cli,
+    solana ? fixSolanaCli pkgs,
     cargoBuildSbf ? mkCargoBuildSbf {inherit pkgs solana;},
     rustToolchain ? (harbor-rs.lib.mkToolchain {inherit pkgs;}).rustToolchain,
   }: let
