@@ -57,6 +57,9 @@
             inherit system;
             overlays = [self.lib.rustOverlay];
           }));
+    treefmt =
+      forAllSystems (pkgs:
+        treefmt-nix.lib.evalModule pkgs (import ./nix/treefmt.nix {inherit harbor-meta harbor-rs;}));
     lib = import ./lib {
       inherit harbor-meta harbor-rs;
       solanaSource = solana-source;
@@ -81,15 +84,14 @@
     });
 
     checks = forAllSystems (pkgs:
-      import ./checks {
+      (import ./checks {
         inherit pkgs self nixpkgs nixpkgs-darwin harborRoot;
         meta = harbor-meta.lib;
+      })
+      // {
+        formatting = treefmt.${pkgs.stdenv.hostPlatform.system}.config.build.check self;
       });
 
-    formatter = forAllSystems (pkgs:
-      (treefmt-nix.lib.evalModule pkgs {
-        imports = [harbor-meta.treefmtModules.nix harbor-meta.treefmtModules.toml harbor-rs.treefmtModules.rust];
-        projectRootFile = "flake.nix";
-      }).config.build.wrapper);
+    formatter = nixpkgs.lib.mapAttrs (_: eval: eval.config.build.wrapper) treefmt;
   };
 }
